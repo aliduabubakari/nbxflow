@@ -1,0 +1,87 @@
+[build-system]
+requires = ["setuptools>=67", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nbxflow"
+version = "0.1.0"
+description = "Notebook Ops: Dataflow (OpenLineage) + PerfFlow (OTEL) + Contracts (GE) + LLM helpers"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "Apache-2.0"}
+authors = [{name = "Your Name", email = "you@example.com"}]
+keywords = ["data", "pipeline", "notebook", "observability", "lineage"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+# Core dependencies (always installed)
+dependencies = [
+    "pydantic>=2.0.0",
+    "typing-extensions>=4.8.0",
+]
+
+[project.optional-dependencies]
+# Individual optional dependencies
+ol = ["openlineage-client>=1.17.0"]
+otel = ["opentelemetry-sdk>=1.24.0", "opentelemetry-exporter-otlp>=1.24.0"]
+prometheus = ["prometheus-client>=0.17.0"]
+ge = ["great-expectations>=0.18.0", "pyyaml>=6.0"]
+llm = ["openai>=1.40.0", "tiktoken>=0.7.0"]
+exporters = ["jinja2>=3.1.3"]
+
+# Convenience bundles
+core = ["pandas>=1.5.0", "numpy>=1.20.0"]
+observability = ["nbxflow[ol,otel,prometheus]"]
+quality = ["nbxflow[ge]"]
+ai = ["nbxflow[llm]"]
+all = [
+    "nbxflow[core,ol,otel,prometheus,ge,llm,exporters]",
+]
+
+# Development dependencies
+dev = [
+    "nbxflow[all]",
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0",
+    "python-dotenv>=1.0.0",
+    "requests>=2.28.0",
+]
+
+[project.scripts]
+nbxflow = "nbxflow.cli.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/your-org/nbxflow"
+Repository = "https://github.com/your-org/nbxflow"
+Documentation = "https://github.com/your-org/nbxflow"
+"Bug Tracker" = "https://github.com/your-org/nbxflow/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["nbxflow*"]
+
+[tool.setuptools.package-data]
+nbxflow = ["py.typed"]
+
+# Development tool configuration
+[tool.black]
+line-length = 100
+target-version = ['py39', 'py310', 'py311']
+
+[tool.isort]
+profile = "black"
+line_length = 100
